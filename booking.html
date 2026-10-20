@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092e62"><title>Book a Service | 4Guard</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script defer src="portal.js"></script>
+</head>
+<body class="portal-body">
+  <main class="portal-shell">
+    <header class="portal-header"><a class="brand portal-brand" href="index.html"><img src="assets/4guard-mark.svg" alt=""><span class="brand-name">4GUARD<small>CLEANING & PEST SOLUTIONS</small></span></a><div><a class="under-link" href="dashboard.html">My bookings <span>→</span></a><button class="text-button" data-sign-out>Sign out</button></div></header>
+    <section class="portal-panel booking-panel"><div><span class="kicker">SERVICE BOOKING</span><h1>Tell us what your space needs.</h1><p>Send your preferred date and service details to 4Guard. We will confirm availability with you.</p></div>
+      <form id="booking-form" class="portal-form booking-form"><div class="form-row"><label>Service<select name="service_type" required><option value="">Select a service</option><option>Cleaning</option><option>Fumigation / Pest Control</option><option>Both</option></select></label><label>Property type<select name="property_type" required><option value="">Select property type</option><option>Residential</option><option>Commercial</option></select></label></div><div class="form-row"><label>Preferred date<input type="date" name="preferred_date" required></label><label>Location<input name="location" required placeholder="Town or area"></label></div><label>Booking details<textarea name="details" rows="5" required placeholder="Tell us about the property and what you need."></textarea></label><button class="btn green" type="submit">Send booking request <b>↗</b></button><p id="booking-feedback" class="portal-feedback" role="status" aria-live="polite"></p></form>
+    </section>
+  </main>
+</body>
+</html>
