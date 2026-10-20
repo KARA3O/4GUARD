@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092e62"><title>Client Login | 4Guard</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+  <script defer src="portal.js"></script>
+</head>
+<body class="portal-body">
+  <main class="portal-shell auth-shell">
+    <a class="brand portal-brand" href="index.html"><img src="assets/4guard-mark.svg" alt=""><span class="brand-name">4GUARD<small>CLEANING & PEST SOLUTIONS</small></span></a>
+    <section class="auth-card">
+      <span class="kicker">CLIENT PORTAL</span><h1>Welcome back.</h1>
+      <p>Sign in to request a service and track your bookings. New here? Create an account below.</p>
+      <div class="portal-switch" role="tablist"><button class="active" type="button" data-auth-tab="login">Sign in</button><button type="button" data-auth-tab="signup">Create account</button></div>
+      <form id="login-form" class="portal-form"><label>Email address<input type="email" name="email" required autocomplete="email"></label><label>Password<input type="password" name="password" required autocomplete="current-password" minlength="6"></label><button class="btn green" type="submit">Sign in <b>↗</b></button></form>
+      <form id="signup-form" class="portal-form is-hidden"><label>Full name<input type="text" name="full_name" required autocomplete="name"></label><label>Email address<input type="email" name="email" required autocomplete="email"></label><label>Password<input type="password" name="password" required autocomplete="new-password" minlength="6"></label><button class="btn green" type="submit">Create account <b>↗</b></button></form>
+      <p id="auth-feedback" class="portal-feedback" role="status" aria-live="polite"></p>
+      <a class="under-link" href="index.html">Back to website <span>←</span></a>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092e62"><title>Bookings | 4Guard</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+  <script defer src="portal.js"></script>
+</head>
+<body class="portal-body">
+  <main class="portal-shell">
+    <header class="portal-header"><a class="brand portal-brand" href="index.html"><img src="assets/4guard-mark.svg" alt=""><span class="brand-name">4GUARD<small>CLEANING & PEST SOLUTIONS</small></span></a><div><a class="under-link" href="booking.html">Book a service <span>→</span></a><button class="text-button" data-sign-out>Sign out</button></div></header>
+    <section class="portal-panel"><div class="portal-heading"><div><span class="kicker" id="dashboard-kicker">MY BOOKINGS</span><h1 id="dashboard-title">Your bookings.</h1><p id="dashboard-description">Track your service requests and their status.</p></div></div>
+      <div id="admin-tools" class="admin-tools is-hidden"><label>Find bookings by customer email<input id="email-search" type="search" placeholder="customer@example.com"></label><button class="btn navy" id="search-bookings" type="button">Search bookings <b>→</b></button></div>
+      <p id="dashboard-feedback" class="portal-feedback" role="status" aria-live="polite"></p><div id="booking-list" class="booking-list" aria-live="polite"></div>
+    </section>
+  </main>
+</body>
+</html>

@@ -4,11 +4,11 @@ compatibility_date = "2026-10-20"
 
 # Cloudflare serves every HTML, CSS, JS and asset file in this folder.
 [assets]
-directory = "."
+directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
 
 [[d1_databases]]
 binding = "DB"
 database_name = "4guard-bookings"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "caec0b2f-b98e-4769-a4c3-fef174302eca"

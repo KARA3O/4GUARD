@@ -23,7 +23,7 @@ Cloudflare prints a `database_id`. Open `wrangler.toml` and replace:
 database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
 ```
 
-with that value.
+with that value. For the database already created in this project, the value is `caec0b2f-b98e-4769-a4c3-fef174302eca`.
 
 ## 2. Add the owner email
 
@@ -82,4 +82,4 @@ Cloudflare returns a public `workers.dev` URL. You can attach a custom domain la
 - `.dev.vars.example` — local environment-variable template
 - `portal.js` — browser UI that calls the Worker API
 
-Do not commit `.dev.vars` or any Cloudflare API tokens.
+Do not commit `.dev.vars` or any Cloudflare API tokens. The Worker only uploads the `public/` directory as website assets; source, documentation, D1 schema, and Git history stay out of the public deployment.
