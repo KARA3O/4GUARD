@@ -4,9 +4,9 @@ Responsive static website with Home, Services, About, Contact, Login, Booking an
 
 ## Booking portal
 
-The project includes a secure customer and owner booking portal backed by Supabase. Customers can create accounts, send booking requests and view their bookings. The owner account (`guardddmt@gmail.com`) can see all bookings, search them by customer email, and update their status or internal notes.
+The project includes a secure customer and owner booking portal backed by Cloudflare Worker and D1. Customers can create accounts, send booking requests and view their bookings. The owner account (`guardddmt@gmail.com`) can see all bookings, search them by customer email, and update their status or internal notes.
 
-Follow [SUPABASE_SETUP.md](SUPABASE_SETUP.md) to activate the database/authentication and host the site free on Netlify.
+Follow [CLOUDFLARE_SETUP.md](CLOUDFLARE_SETUP.md) to create the D1 database, activate the portal, and deploy it free on Cloudflare.
 
 ## Preview
 

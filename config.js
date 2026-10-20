@@ -5,9 +5,5 @@ window.FOURGUARD_CONFIG = {
   phone: "",
   businessHours: "",
   serviceAreas: "",
-  // Paste these public values from Supabase Dashboard → Project Settings → API.
-  // The anon key is safe to use in a browser; never add a service_role key here.
-  supabaseUrl: "",
-  supabaseAnonKey: "",
   adminEmail: "guardddmt@gmail.com"
 };
