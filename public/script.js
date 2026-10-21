@@ -21,6 +21,21 @@ function init4Guard() {
     }));
   }
   document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
+  // Show the visitor's current session state without blocking public browsing.
+  const navIdentity = document.createElement('span');
+  navIdentity.className = 'session-identity';
+  navIdentity.setAttribute('aria-live', 'polite');
+  navIdentity.textContent = 'Guest';
+  nav?.appendChild(navIdentity);
+  fetch('/api/me', { credentials: 'same-origin' }).then(async response => {
+    if (!response.ok) return null;
+    const data = await response.json(); return data.user || null;
+  }).then(user => {
+    if (!navIdentity.isConnected) return;
+    if (!user) { navIdentity.textContent = 'Guest'; navIdentity.dataset.role = 'guest'; return; }
+    navIdentity.textContent = user.is_admin ? `Admin · ${user.full_name}` : `Customer · ${user.full_name}`;
+    navIdentity.dataset.role = user.is_admin ? 'admin' : 'customer';
+  }).catch(() => { navIdentity.textContent = 'Guest'; navIdentity.dataset.role = 'guest'; });
   document.querySelectorAll('[data-service]').forEach(link => link.addEventListener('click', () => {
     try { sessionStorage.setItem('4guard-service', link.dataset.service); } catch {}
   }));
@@ -48,10 +63,23 @@ function init4Guard() {
   const form = document.querySelector('#quote-form');
   if (!form) return;
   const feedback = document.querySelector('#form-feedback');
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!form.reportValidity()) {
       feedback.textContent = 'Please complete the required fields and check the email address.';
+      feedback.classList.add('error'); return;
+    }
+    // Preparing the form is public; actually sending an enquiry requires an account.
+    try {
+      const authResponse = await fetch('/api/me', { credentials: 'same-origin' });
+      if (!authResponse.ok) {
+        feedback.textContent = 'Please sign in or create a customer account before sending your enquiry. Your form details have not been sent.';
+        feedback.classList.add('error');
+        window.location.assign('login.html?next=quote');
+        return;
+      }
+    } catch {
+      feedback.textContent = 'We could not verify your account. Please try again before sending.';
       feedback.classList.add('error'); return;
     }
     const data = Object.fromEntries(new FormData(form));

@@ -1,0 +1,13 @@
+# Local secrets and Cloudflare state
+.dev.vars
+.wrangler/
+
+# Dependencies / build artifacts
+node_modules/
+dist/
+coverage/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
