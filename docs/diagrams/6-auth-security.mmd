@@ -1,0 +1,13 @@
+flowchart TB
+  A["POST /api/auth/login"] --> B{"8 or more failures for this<br/>email in the last 15 min?"}
+  B -- yes --> X["429 Too many attempts"]
+  B -- no --> C["PBKDF2-SHA256 (100,000 rounds, per-user salt)<br/>constant-time compare"]
+  C -- wrong --> F["Record failure, 401"]
+  C -- right --> S["New random 32-byte token<br/>store SHA-256(token) in sessions<br/>Set-Cookie HttpOnly, Secure, SameSite=Lax, 7 days"]
+  S --> R["Every /api request: cookie -> session -> user"]
+  R --> G{"Owner-only route?"}
+  G -- "yes and email = ADMIN_EMAIL" --> OK["Allowed"]
+  G -- "yes, other account" --> N["403"]
+  G -- "no: customer route" --> OWN["Only the customer's own bookings,<br/>messages and reviews are returned"]
+  CSRF["Every POST/PATCH: Origin header must be this website"] -.-> R
+  KEY["First owner sign-up needs ADMIN_SETUP_KEY"] -.-> S

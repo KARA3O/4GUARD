@@ -1,0 +1,61 @@
+erDiagram
+  users ||--o{ sessions : "signs in with"
+  users ||--o{ bookings : "makes"
+  users ||--o{ reviews : "writes"
+  users ||--o{ customer_feedback : "sends / receives"
+  bookings ||--o| reviews : "may get one"
+  bookings ||--o{ customer_feedback : "has messages"
+
+  users {
+    text id PK
+    text full_name
+    text email UK
+    text phone
+    text password_hash "PBKDF2-SHA256"
+    text password_salt
+    text created_at
+  }
+  sessions {
+    text token_hash PK "SHA-256 of cookie token"
+    text user_id FK
+    text expires_at "7 days"
+  }
+  bookings {
+    text id PK
+    text reference UK "e.g. 4G-7K2M9Q"
+    text customer_id FK
+    text service_type "Pest control / Cleaning / Both"
+    text service_options "e.g. Cockroaches; Rats and mice"
+    text property_type "Residential / Commercial"
+    text premises "House, Office, ..."
+    text address
+    text location "suburb or town"
+    text contact_phone
+    text preferred_date
+    text preferred_time
+    text scheduled_date "set when confirmed"
+    text scheduled_time
+    text details
+    text status "PENDING CONFIRMED COMPLETED CANCELLED"
+    text admin_note "shown to customer"
+  }
+  reviews {
+    text id PK
+    text booking_id FK "one per booking"
+    integer rating "1 to 5"
+    text review_text
+    text status "PENDING APPROVED REJECTED"
+  }
+  customer_feedback {
+    text id PK
+    text booking_id FK
+    text customer_id FK
+    text message
+    integer from_admin "0 customer, 1 owner reply"
+    text read_at
+  }
+  login_attempts {
+    integer id PK
+    text email
+    text created_at "8 failures in 15 min = locked"
+  }

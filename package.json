@@ -1,0 +1,16 @@
+{
+  "name": "4guard-booking-portal",
+  "version": "2.0.0",
+  "private": true,
+  "description": "4Guard Cleaning & Pest Solutions website and booking portal (Cloudflare Workers + D1). Designed and developed by Neuropulse Inc.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply 4guard-bookings --local",
+    "db:migrate:remote": "wrangler d1 migrations apply 4guard-bookings --remote",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  }
+}

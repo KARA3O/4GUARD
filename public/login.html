@@ -1,23 +1,124 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-ZA">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#092e62"><title>Client Login | 4Guard</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
-  <script defer src="config.js"></script><script defer src="portal.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in | 4Guard</title>
+  <meta name="description" content="Log in or create a 4Guard account to book and track pest control and cleaning.">
+  <meta name="theme-color" content="#092e62">
+  <meta property="og:title" content="Log in | 4Guard">
+  <meta property="og:description" content="Log in or create a 4Guard account to book and track pest control and cleaning.">
+  <meta property="og:image" content="/assets/img/4guard-logo.jpg">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/login.js"></script>
 </head>
-<body class="portal-body">
-  <main class="portal-shell auth-shell">
-    <a class="brand portal-brand" href="index.html"><img src="assets/4guard-mark.svg" alt=""><span class="brand-name">4GUARD<small>CLEANING & PEST SOLUTIONS</small></span></a>
-    <section class="auth-card">
-      <span class="kicker">CLIENT PORTAL</span><p class="session-identity login-identity">Current visitor: Guest · Public website browsing does not require login.</p><h1>Welcome back.</h1>
-      <p>Sign in or create an account to submit service requests, send messages and feedback, and track bookings. You can browse the public website without signing in.</p>
-      <div class="portal-switch" role="tablist"><button class="active" type="button" data-auth-tab="login">Sign in</button><button type="button" data-auth-tab="signup">Create account</button></div>
-      <form id="login-form" class="portal-form"><label>Email address<input type="email" name="email" required autocomplete="email"></label><label>Password<input type="password" name="password" required autocomplete="current-password" minlength="8" maxlength="128"></label><button class="btn green" type="submit">Sign in <b>↗</b></button></form>
-      <form id="signup-form" class="portal-form is-hidden"><label>Full name<input type="text" name="full_name" required maxlength="120" autocomplete="name"></label><label>Email address<input type="email" name="email" required maxlength="254" autocomplete="email" data-signup-email></label><label id="admin-setup-key-wrap" class="is-hidden">Owner setup key<input type="password" name="admin_setup_key" autocomplete="off" data-admin-setup-key></label><label>Password<input type="password" name="password" required autocomplete="new-password" minlength="8" maxlength="128"></label><button class="btn green" type="submit">Create account <b>↗</b></button></form>
-      <p id="auth-feedback" class="portal-feedback" role="status" aria-live="polite"></p>
-      <a class="under-link" href="index.html">Back to website <span>←</span></a>
-    </section>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="contact-bar">
+    <div class="wrap">
+      <a data-contact="phone" data-requires="phone" href="#"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#phone"></use></svg><span data-value></span></a>
+      <a data-contact="whatsapp" data-requires="whatsapp" href="#" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#chat"></use></svg><span data-value></span></a>
+      <a data-contact="email" href="mailto:guardddmt@gmail.com"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#mail"></use></svg><span data-value>guardddmt@gmail.com</span></a>
+      <span class="push" data-requires="hours"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#clock"></use></svg><span data-contact="hours"></span></span>
+      <span data-requires="areas"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#pin"></use></svg><span data-contact="areas"></span></span>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="4Guard Cleaning and Pest Solutions, home">
+        <img src="/assets/img/4guard-mark.svg" alt="" width="38" height="43">
+        <span class="brand-name"><strong>4GUARD</strong><small>Cleaning &amp; Pest Solutions</small></span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/pest-control">Pest control</a>
+        <a href="/cleaning">Cleaning</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a class="btn nav-book" href="/booking">Book a service</a>
+      </nav>
+      <div class="header-actions">
+        <a class="account-link" href="/login" data-account-link><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#user"></use></svg><span>Log in</span></a>
+        <a class="btn" href="/booking">Book a service</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#menu"></use></svg></button>
+    </div>
+  </header>
+  <main id="main" class="app-main">
+    <div class="wrap auth-layout">
+      <div class="auth-aside">
+        <h1>Your 4Guard account</h1>
+        <p class="lead">Use your account to book services and follow every job.</p>
+        <ul>
+          <li><span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#calendar"></use></svg></span><div><strong>See your bookings</strong><span>Status, confirmed date and our preparation notes.</span></div></li>
+          <li><span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#chat"></use></svg></span><div><strong>Message 4Guard</strong><span>Ask about a booking and read our replies.</span></div></li>
+          <li><span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#star"></use></svg></span><div><strong>Review the work</strong><span>Rate completed jobs to help other customers.</span></div></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="tabs" role="tablist" aria-label="Account">
+          <button type="button" role="tab" id="tab-login" aria-controls="login-form" aria-selected="true">Log in</button>
+          <button type="button" role="tab" id="tab-signup" aria-controls="signup-form" aria-selected="false">Create account</button>
+        </div>
+        <p class="alert" data-next-note hidden><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#calendar"></use></svg><span>Log in or create an account to continue with your booking.</span></p>
+        <form class="form" id="login-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
+          <div class="field"><label for="login-email">Email address</label><input id="login-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="login-password">Password</label><div class="password-wrap"><input id="login-password" name="password" type="password" autocomplete="current-password" required><button type="button" data-show-password>Show</button></div></div>
+          <p class="form-status" role="status" aria-live="polite"></p>
+          <button class="btn btn-block" type="submit">Log in</button>
+          <button class="link-button" type="button" data-forgot>Forgot your password?</button>
+          <p class="alert alert-warn" data-forgot-help hidden><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#mail"></use></svg><span>Email <a data-contact="email" href="mailto:guardddmt@gmail.com">guardddmt@gmail.com</a> from the address on your account. 4Guard will give you a temporary password, which you can change in your account.</span></p>
+        </form>
+        <form class="form" id="signup-form" role="tabpanel" aria-labelledby="tab-signup" hidden novalidate>
+          <div class="field"><label for="signup-name">Full name</label><input id="signup-name" name="full_name" type="text" autocomplete="name" maxlength="120" required></div>
+          <div class="field"><label for="signup-email">Email address</label><input id="signup-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="signup-phone">Phone number <span class="optional">(optional)</span></label><input id="signup-phone" name="phone" type="tel" autocomplete="tel" placeholder="082 123 4567"></div>
+          <div class="field" data-owner-key hidden><label for="signup-key">Owner setup key</label><input id="signup-key" name="admin_setup_key" type="password" autocomplete="off"><p class="hint">This is the 4Guard owner email. Enter the private setup key to create the owner account.</p></div>
+          <div class="field"><label for="signup-password">Password</label><div class="password-wrap"><input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-show-password>Show</button></div><p class="hint">At least 8 characters.</p></div>
+          <p class="form-status" role="status" aria-live="polite"></p>
+          <button class="btn btn-block" type="submit">Create account</button>
+        </form>
+      </div>
+    </div>
   </main>
+  <footer class="site-footer">
+    <div class="wrap footer-main">
+      <div>
+        <a class="brand" href="/"><img src="/assets/img/4guard-mark-white.svg" alt="" width="38" height="43"><span class="brand-name"><strong>4GUARD</strong><small>Cleaning &amp; Pest Solutions</small></span></a>
+        <p>Pest control, fumigation and professional cleaning for homes and businesses.</p>
+      </div>
+      <div>
+        <h2>Pest control</h2>
+        <ul><li><a href="/pest-control#cockroaches">Cockroaches</a></li><li><a href="/pest-control#rodents">Rats and mice</a></li><li><a href="/pest-control#termites">Termites</a></li><li><a href="/pest-control#bedbugs">Bed bugs</a></li><li><a href="/pest-control#ants">Ants</a></li><li><a href="/pest-control#fleas">Fleas and ticks</a></li><li><a href="/pest-control#flying">Flies and mosquitoes</a></li><li><a href="/pest-control">All pest services</a></li></ul>
+      </div>
+      <div>
+        <h2>Cleaning</h2>
+        <ul><li><a href="/cleaning#home">Home cleaning</a></li><li><a href="/cleaning#deep">Deep cleaning</a></li><li><a href="/cleaning#office">Office and commercial</a></li><li><a href="/cleaning#move">Move-in / move-out</a></li><li><a href="/cleaning#sanitising">Sanitising and hygiene</a></li></ul>
+      </div>
+      <div>
+        <h2>Get in touch</h2>
+        <ul>
+          <li><a href="/booking">Book a service</a></li>
+          <li><a href="/login" data-account-link><span>Log in</span></a></li>
+          <li data-requires="phone"><a data-contact="phone" href="#"></a></li>
+          <li><a data-contact="email" href="mailto:guardddmt@gmail.com">guardddmt@gmail.com</a></li>
+          <li data-requires="areas"><span data-contact="areas"></span></li>
+          <li><a href="/contact">Contact page</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="wrap"><span>&copy; <span data-year>2026</span> 4Guard Cleaning &amp; Pest Solutions. All rights reserved.</span><a href="#top">Back to top</a></div>
+    </div>
+    <div class="credit">
+      <div class="wrap">
+        <span>Website designed and developed by</span>
+        <a data-developer-link href="#" target="_blank" rel="noopener"><img src="/assets/img/neuropulse-logo.png" alt="Neuropulse Inc." width="161" height="34"></a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

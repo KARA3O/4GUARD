@@ -1,19 +1,97 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-ZA">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#092e62"><title>Bookings | 4Guard</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
-  <script defer src="portal.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My account | 4Guard</title>
+  <meta name="description" content="Your 4Guard bookings, messages and account details.">
+  <meta name="theme-color" content="#092e62">
+  <meta property="og:title" content="My account | 4Guard">
+  <meta property="og:description" content="Your 4Guard bookings, messages and account details.">
+  <meta property="og:image" content="/assets/img/4guard-logo.jpg">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/dashboard.js"></script>
 </head>
-<body class="portal-body">
-  <main class="portal-shell">
-    <header class="portal-header"><a class="brand portal-brand" href="index.html"><img src="assets/4guard-mark.svg" alt=""><span class="brand-name">4GUARD<small>CLEANING & PEST SOLUTIONS</small></span></a><div class="dashboard-nav"><span id="account-role" class="account-role">Customer portal</span><a class="portal-action portal-action-secondary" href="index.html">Visit website <span>↗</span></a><a class="portal-action portal-action-book" href="booking.html">＋ Book a service</a><button class="portal-action portal-action-signout" data-sign-out>Sign out</button></div></header>
-    <section class="portal-panel"><div class="portal-heading"><div><span class="kicker" id="dashboard-kicker">CUSTOMER PORTAL · MY BOOKINGS</span><h1 id="dashboard-title">Your bookings.</h1><p id="dashboard-description">Track your service requests and their status.</p></div></div>
-      <div id="admin-tools" class="admin-tools is-hidden"><label>Find bookings by customer email<input id="email-search" type="search" placeholder="customer@example.com"></label><button class="btn navy" id="search-bookings" type="button">Search bookings <b>→</b></button></div>
-      <section id="admin-create-booking-panel" class="admin-create-booking is-hidden"><div class="section-top"><div><span class="kicker">ADMIN TOOL</span><h2>Create a booking for a customer</h2><p>The customer must already have a 4Guard account. The booking will appear in their portal under their name.</p></div></div><form id="admin-create-booking-form" class="portal-form"><label>Registered customer email<input type="email" name="customer_email" required placeholder="customer@example.com"></label><div class="form-row"><label>Service<select name="service_type" required><option value="">Select a service</option><option>Cleaning</option><option>Fumigation / Pest Control</option><option>Both</option></select></label><label>Property type<select name="property_type" required><option value="">Select property type</option><option>Residential</option><option>Commercial</option></select></label></div><div class="form-row"><label>Preferred date<input type="date" name="preferred_date" data-min-today required></label><label>Location<input name="location" maxlength="200" required placeholder="Town or area"></label></div><label>Booking details<textarea name="details" rows="3" maxlength="3000" required placeholder="Describe the requested work"></textarea></label><button class="btn green" type="submit">Create customer booking <b>↗</b></button><p id="admin-create-booking-feedback" class="portal-feedback" role="status" aria-live="polite"></p></form></section>
-      <p id="dashboard-feedback" class="portal-feedback" role="status" aria-live="polite"></p><section id="customer-feedback-panel" class="customer-feedback-panel"><div class="section-top"><div><span class="kicker">YOUR MESSAGES</span><h2>Feedback to 4Guard</h2><p>Send a message about one of your job requests. The 4Guard team can read it in the admin portal.</p></div></div><div id="customer-feedback-list" class="customer-feedback-list"></div></section><section id="admin-feedback-panel" class="review-moderation is-hidden"><div class="section-top"><div><span class="kicker">CUSTOMER MESSAGES</span><h2>Customer feedback inbox</h2><p>Messages customers have sent through their portal.</p></div></div><div id="admin-feedback-list" class="admin-review-list"></div></section><section id="review-moderation" class="review-moderation is-hidden"><div class="section-top"><div><span class="kicker">CUSTOMER FEEDBACK</span><h2>Review moderation</h2><p>Approve genuine customer reviews before they appear publicly.</p></div></div><div id="admin-review-list" class="admin-review-list"></div></section><div id="booking-list" class="booking-list" aria-live="polite"></div>
-    </section>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="contact-bar">
+    <div class="wrap">
+      <a data-contact="phone" data-requires="phone" href="#"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#phone"></use></svg><span data-value></span></a>
+      <a data-contact="whatsapp" data-requires="whatsapp" href="#" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#chat"></use></svg><span data-value></span></a>
+      <a data-contact="email" href="mailto:guardddmt@gmail.com"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#mail"></use></svg><span data-value>guardddmt@gmail.com</span></a>
+      <span class="push" data-requires="hours"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#clock"></use></svg><span data-contact="hours"></span></span>
+      <span data-requires="areas"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#pin"></use></svg><span data-contact="areas"></span></span>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="4Guard Cleaning and Pest Solutions, home">
+        <img src="/assets/img/4guard-mark.svg" alt="" width="38" height="43">
+        <span class="brand-name"><strong>4GUARD</strong><small>Cleaning &amp; Pest Solutions</small></span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/pest-control">Pest control</a>
+        <a href="/cleaning">Cleaning</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a class="btn nav-book" href="/booking">Book a service</a>
+      </nav>
+      <div class="header-actions">
+        <a class="account-link" href="/login" data-account-link><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#user"></use></svg><span>Log in</span></a>
+        <a class="btn" href="/booking">Book a service</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#menu"></use></svg></button>
+    </div>
+  </header>
+  <main id="main" class="app-main">
+    <div class="wrap" data-portal>
+      <div class="portal-head">
+        <div><h1 data-portal-title>Your account</h1><p data-portal-subtitle>Loading your account&hellip;</p></div>
+        <div class="hero-actions"><a class="btn" href="/booking" data-book-button>Book a service</a><button class="btn btn-outline" type="button" data-sign-out>Log out</button></div>
+      </div>
+      <div class="portal-tabs" role="tablist" aria-label="Account sections" data-tabs></div>
+      <div data-panels><p class="summary-empty">Loading&hellip;</p></div>
+    </div>
   </main>
+  <footer class="site-footer">
+    <div class="wrap footer-main">
+      <div>
+        <a class="brand" href="/"><img src="/assets/img/4guard-mark-white.svg" alt="" width="38" height="43"><span class="brand-name"><strong>4GUARD</strong><small>Cleaning &amp; Pest Solutions</small></span></a>
+        <p>Pest control, fumigation and professional cleaning for homes and businesses.</p>
+      </div>
+      <div>
+        <h2>Pest control</h2>
+        <ul><li><a href="/pest-control#cockroaches">Cockroaches</a></li><li><a href="/pest-control#rodents">Rats and mice</a></li><li><a href="/pest-control#termites">Termites</a></li><li><a href="/pest-control#bedbugs">Bed bugs</a></li><li><a href="/pest-control#ants">Ants</a></li><li><a href="/pest-control#fleas">Fleas and ticks</a></li><li><a href="/pest-control#flying">Flies and mosquitoes</a></li><li><a href="/pest-control">All pest services</a></li></ul>
+      </div>
+      <div>
+        <h2>Cleaning</h2>
+        <ul><li><a href="/cleaning#home">Home cleaning</a></li><li><a href="/cleaning#deep">Deep cleaning</a></li><li><a href="/cleaning#office">Office and commercial</a></li><li><a href="/cleaning#move">Move-in / move-out</a></li><li><a href="/cleaning#sanitising">Sanitising and hygiene</a></li></ul>
+      </div>
+      <div>
+        <h2>Get in touch</h2>
+        <ul>
+          <li><a href="/booking">Book a service</a></li>
+          <li><a href="/login" data-account-link><span>Log in</span></a></li>
+          <li data-requires="phone"><a data-contact="phone" href="#"></a></li>
+          <li><a data-contact="email" href="mailto:guardddmt@gmail.com">guardddmt@gmail.com</a></li>
+          <li data-requires="areas"><span data-contact="areas"></span></li>
+          <li><a href="/contact">Contact page</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="wrap"><span>&copy; <span data-year>2026</span> 4Guard Cleaning &amp; Pest Solutions. All rights reserved.</span><a href="#top">Back to top</a></div>
+    </div>
+    <div class="credit">
+      <div class="wrap">
+        <span>Website designed and developed by</span>
+        <a data-developer-link href="#" target="_blank" rel="noopener"><img src="/assets/img/neuropulse-logo.png" alt="Neuropulse Inc." width="161" height="34"></a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

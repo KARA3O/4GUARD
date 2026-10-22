@@ -1,17 +1,169 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-ZA">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#092e62"><title>Book a Service | 4Guard</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
-  <script defer src="portal.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book Pest Control or Cleaning | 4Guard</title>
+  <meta name="description" content="Book pest control, fumigation or cleaning online in four short steps.">
+  <meta name="theme-color" content="#092e62">
+  <meta property="og:title" content="Book Pest Control or Cleaning | 4Guard">
+  <meta property="og:description" content="Book pest control, fumigation or cleaning online in four short steps.">
+  <meta property="og:image" content="/assets/img/4guard-logo.jpg">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/booking.js"></script>
 </head>
-<body class="portal-body">
-  <main class="portal-shell">
-    <header class="portal-header"><a class="brand portal-brand" href="index.html"><img src="assets/4guard-mark.svg" alt=""><span class="brand-name">4GUARD<small>CLEANING & PEST SOLUTIONS</small></span></a><div><a class="under-link" href="index.html">Website <span>↗</span></a><a class="under-link" href="dashboard.html">My bookings <span>→</span></a><a class="text-button" href="login.html">Client portal</a></div></header>
-    <section class="portal-panel booking-panel"><div><span class="kicker">SERVICE BOOKING</span><h1>Tell us what your space needs.</h1><p>Browse freely, then sign in or create an account to submit a service request. Your request will be linked to your account so you can track its status and read messages from 4Guard.</p></div>
-      <p id="booking-access-message" class="portal-feedback" role="status" aria-live="polite">Checking your account…</p><form id="booking-form" class="portal-form booking-form is-hidden"><div class="form-row"><label>Service<select name="service_type" required><option value="">Select a service</option><option>Cleaning</option><option>Fumigation / Pest Control</option><option>Both</option></select></label><label>Property type<select name="property_type" required><option value="">Select property type</option><option>Residential</option><option>Commercial</option></select></label></div><div class="form-row"><label>Preferred date<input type="date" name="preferred_date" data-min-today required></label><label>Location<input name="location" required placeholder="Town or area"></label></div><label>Booking details<textarea name="details" rows="5" required placeholder="Tell us about the property and what you need."></textarea></label><button class="btn green" type="submit">Send booking request <b>↗</b></button><p id="booking-feedback" class="portal-feedback" role="status" aria-live="polite"></p></form>
-    </section>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="contact-bar">
+    <div class="wrap">
+      <a data-contact="phone" data-requires="phone" href="#"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#phone"></use></svg><span data-value></span></a>
+      <a data-contact="whatsapp" data-requires="whatsapp" href="#" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#chat"></use></svg><span data-value></span></a>
+      <a data-contact="email" href="mailto:guardddmt@gmail.com"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#mail"></use></svg><span data-value>guardddmt@gmail.com</span></a>
+      <span class="push" data-requires="hours"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#clock"></use></svg><span data-contact="hours"></span></span>
+      <span data-requires="areas"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#pin"></use></svg><span data-contact="areas"></span></span>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="4Guard Cleaning and Pest Solutions, home">
+        <img src="/assets/img/4guard-mark.svg" alt="" width="38" height="43">
+        <span class="brand-name"><strong>4GUARD</strong><small>Cleaning &amp; Pest Solutions</small></span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/pest-control">Pest control</a>
+        <a href="/cleaning">Cleaning</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a class="btn nav-book" href="/booking">Book a service</a>
+      </nav>
+      <div class="header-actions">
+        <a class="account-link" href="/login" data-account-link><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#user"></use></svg><span>Log in</span></a>
+        <a class="btn" href="/booking">Book a service</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#menu"></use></svg></button>
+    </div>
+  </header>
+  <main id="main" class="app-main">
+    <div class="wrap">
+      <div class="portal-head"><div><h1>Book a service</h1><p>Four short steps. Nothing is sent until you press Send booking request.</p></div></div>
+      <div class="booking-layout">
+        <div class="panel">
+          <ol class="wizard-steps" aria-label="Booking steps">
+            <li data-step-marker="0"><span>Service</span></li>
+            <li data-step-marker="1"><span>Property</span></li>
+            <li data-step-marker="2"><span>Date and contact</span></li>
+            <li data-step-marker="3"><span>Check and send</span></li>
+          </ol>
+          <form id="booking-form" novalidate>
+            <section class="step" data-step="0" aria-labelledby="step0-title">
+              <h2 id="step0-title" tabindex="-1">What do you need?</h2>
+              <p>Choose the type of service, then everything that applies.</p>
+              <div class="step-group" role="radiogroup" aria-label="Type of service">
+                <div class="choice-grid cols-3" data-category-choices></div>
+              </div>
+              <div class="step-group" data-options-group hidden>
+                <span class="label" id="options-label">Which services?</span>
+                <div class="choice-grid" data-service-choices aria-labelledby="options-label"></div>
+              </div>
+              <p class="field-error" data-error="step0" role="alert"></p>
+            </section>
+
+            <section class="step" data-step="1" aria-labelledby="step1-title" hidden>
+              <h2 id="step1-title" tabindex="-1">Where is the job?</h2>
+              <p>This helps us send the right team and equipment.</p>
+              <div class="step-group" role="radiogroup" aria-label="Home or business">
+                <div class="choice-grid" data-property-choices></div>
+              </div>
+              <div class="form" style="margin-top:20px">
+                <div class="field"><label for="premises">Type of property</label><select id="premises" name="premises" required></select></div>
+                <div class="field"><label for="address">Street address</label><input id="address" name="address" type="text" autocomplete="street-address" maxlength="200" required placeholder="House number and street, complex or business name"></div>
+                <div class="field"><label for="location">Suburb or town</label><input id="location" name="location" type="text" autocomplete="address-level2" maxlength="120" required></div>
+              </div>
+              <p class="field-error" data-error="step1" role="alert"></p>
+            </section>
+
+            <section class="step" data-step="2" aria-labelledby="step2-title" hidden>
+              <h2 id="step2-title" tabindex="-1">When suits you?</h2>
+              <p>This is your preferred date. 4Guard will confirm the final date and time with you.</p>
+              <div class="form" style="margin-top:20px">
+                <div class="field"><label for="preferred_date">Preferred date</label><input id="preferred_date" name="preferred_date" type="date" required></div>
+                <div class="step-group" role="radiogroup" aria-label="Preferred time of day" style="margin-top:0"><span class="label">Preferred time of day</span><div class="choice-grid cols-3" data-time-choices></div></div>
+                <div class="field"><label for="contact_phone">Phone number for the day</label><input id="contact_phone" name="contact_phone" type="tel" autocomplete="tel" required placeholder="082 123 4567"></div>
+                <div class="field"><label for="details">Anything else we should know? <span class="optional">(optional)</span></label><textarea id="details" name="details" maxlength="3000" placeholder="What have you noticed, where, and for how long? Pets, children, access or gate codes."></textarea></div>
+              </div>
+              <p class="field-error" data-error="step2" role="alert"></p>
+            </section>
+
+            <section class="step" data-step="3" aria-labelledby="step3-title" hidden>
+              <h2 id="step3-title" tabindex="-1">Check and send</h2>
+              <p>Check your booking, then send it. Use Back to change anything.</p>
+              <dl class="summary-list review-box" data-summary></dl>
+              <div data-account-area></div>
+              <p class="form-status" data-send-status role="status" aria-live="polite"></p>
+            </section>
+
+            <div class="wizard-nav">
+              <button class="btn btn-outline" type="button" data-back hidden><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#arrow-left"></use></svg>Back</button>
+              <span class="spacer"></span>
+              <button class="btn" type="button" data-next>Continue</button>
+              <button class="btn" type="submit" data-send hidden>Send booking request</button>
+            </div>
+          </form>
+          <div class="done-panel" data-done hidden tabindex="-1">
+            <span class="tick"><svg class="icon" aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg></span>
+            <h2>Booking request sent</h2>
+            <p>Your reference is</p>
+            <p class="reference" data-reference></p>
+            <p>4Guard will confirm the date and how to prepare. You will see it in your account.</p>
+            <div class="hero-actions"><a class="btn" href="/dashboard">View my bookings</a><a class="btn btn-outline" href="/booking">Book another service</a></div>
+          </div>
+        </div>
+        <aside class="panel booking-summary" aria-labelledby="summary-title">
+          <h2 id="summary-title">Your booking</h2>
+          <dl class="summary-list" data-summary></dl>
+        </aside>
+      </div>
+    </div>
   </main>
+  <footer class="site-footer">
+    <div class="wrap footer-main">
+      <div>
+        <a class="brand" href="/"><img src="/assets/img/4guard-mark-white.svg" alt="" width="38" height="43"><span class="brand-name"><strong>4GUARD</strong><small>Cleaning &amp; Pest Solutions</small></span></a>
+        <p>Pest control, fumigation and professional cleaning for homes and businesses.</p>
+      </div>
+      <div>
+        <h2>Pest control</h2>
+        <ul><li><a href="/pest-control#cockroaches">Cockroaches</a></li><li><a href="/pest-control#rodents">Rats and mice</a></li><li><a href="/pest-control#termites">Termites</a></li><li><a href="/pest-control#bedbugs">Bed bugs</a></li><li><a href="/pest-control#ants">Ants</a></li><li><a href="/pest-control#fleas">Fleas and ticks</a></li><li><a href="/pest-control#flying">Flies and mosquitoes</a></li><li><a href="/pest-control">All pest services</a></li></ul>
+      </div>
+      <div>
+        <h2>Cleaning</h2>
+        <ul><li><a href="/cleaning#home">Home cleaning</a></li><li><a href="/cleaning#deep">Deep cleaning</a></li><li><a href="/cleaning#office">Office and commercial</a></li><li><a href="/cleaning#move">Move-in / move-out</a></li><li><a href="/cleaning#sanitising">Sanitising and hygiene</a></li></ul>
+      </div>
+      <div>
+        <h2>Get in touch</h2>
+        <ul>
+          <li><a href="/booking">Book a service</a></li>
+          <li><a href="/login" data-account-link><span>Log in</span></a></li>
+          <li data-requires="phone"><a data-contact="phone" href="#"></a></li>
+          <li><a data-contact="email" href="mailto:guardddmt@gmail.com">guardddmt@gmail.com</a></li>
+          <li data-requires="areas"><span data-contact="areas"></span></li>
+          <li><a href="/contact">Contact page</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="wrap"><span>&copy; <span data-year>2026</span> 4Guard Cleaning &amp; Pest Solutions. All rights reserved.</span><a href="#top">Back to top</a></div>
+    </div>
+    <div class="credit">
+      <div class="wrap">
+        <span>Website designed and developed by</span>
+        <a data-developer-link href="#" target="_blank" rel="noopener"><img src="/assets/img/neuropulse-logo.png" alt="Neuropulse Inc." width="161" height="34"></a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

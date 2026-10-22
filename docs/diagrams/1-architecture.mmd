@@ -1,0 +1,34 @@
+flowchart TB
+  subgraph People["Who uses it"]
+    direction LR
+    V["Visitor<br/>browses services"]
+    C["Customer<br/>books and tracks jobs"]
+    O["Owner (4Guard)<br/>manages bookings"]
+  end
+
+  EDGE["Cloudflare edge<br/>HTTPS, caching, security headers (_headers)"]
+
+  subgraph CF["Cloudflare Workers project (deployed with: npx wrangler deploy)"]
+    direction TB
+    ASSETS["Static website: public/<br/>HTML pages, CSS, JavaScript, icons, fonts"]
+    W["Worker API: src/index.js<br/>router, origin check, error handling"]
+    subgraph Routes["src/routes"]
+      direction LR
+      R1["auth.js<br/>accounts, sessions"]
+      R2["bookings.js<br/>bookings, owner stats"]
+      R3["messages.js<br/>two-way messages"]
+      R4["reviews.js<br/>reviews, moderation"]
+      R5["health.js<br/>status check"]
+    end
+    DB[("D1 database (SQLite)<br/>users, sessions, bookings, reviews,<br/>customer_feedback, login_attempts")]
+  end
+
+  CAT["catalog.js<br/>services, property types, time slots<br/>shared by the website and the API"]
+
+  V & C & O --> EDGE
+  EDGE -- "pages and files" --> ASSETS
+  EDGE -- "/api/* requests" --> W
+  W --> Routes
+  Routes --> DB
+  CAT -. "booking form options" .-> ASSETS
+  CAT -. "server-side validation" .-> R2

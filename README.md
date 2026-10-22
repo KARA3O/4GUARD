@@ -1,63 +1,100 @@
-# 4Guard Cleaning & Pest Solutions
+# 4Guard Cleaning & Pest Solutions — website and booking portal
 
-Responsive static website with Home, Services, About, Contact, Login, Booking and role-based Booking Dashboard pages. Built with HTML, CSS and vanilla JavaScript; no build step is needed.
+Pest control, fumigation and cleaning website with online booking, customer accounts and an owner portal.
+Runs entirely on Cloudflare (Workers + Static Assets + D1).
 
-## Booking portal
+**Designed and developed by Neuropulse Inc.**
 
-The project includes a secure customer and owner booking portal backed by Cloudflare Worker and D1. Customers must create an account and sign in before a booking can be submitted. The Worker enforces this rule server-side. Customers can view only their own bookings, status and owner notes. The owner account (`guardddmt@gmail.com`) can see and search all bookings, update status, and create a booking on behalf of an existing customer account.
+- 📐 How it was planned: open [`docs/index.html`](docs/index.html) in a browser, or read [`docs/SYSTEM_DESIGN.md`](docs/SYSTEM_DESIGN.md)
+- 🖼️ Diagrams: [`docs/diagrams/`](docs/diagrams) (architecture, pages, database, booking lifecycle, booking flow, security)
 
-Follow [CLOUDFLARE_SETUP.md](CLOUDFLARE_SETUP.md) to create/update the D1 database, activate the portal, and deploy it free on Cloudflare. After deploying these changes, run the D1 schema command in that guide so the new `reviews` table exists.
+---
 
-## Preview
+## What's in it
 
-Open `index.html` in a browser or serve this directory with a static web server. Navigation links connect all four pages. The visual palette follows the supplied logo: navy and green. The header uses a compact vector mark and wordmark; the full supplied logo is shown as a framed brand image on the home and About pages.
+**Public website**: Home (with a "What do you need help with?" picker), Pest control, Cleaning, About, Contact.
 
-## Before publishing
+**Booking** (`/booking`) in four steps: service → property → date and contact → check and send.
+Visitors without an account create one (or log in) inside the last step without losing their answers.
+Links like `/booking?service=termites` or `/booking?category=cleaning` pre-fill the form.
 
-1. Confirm the proposed service categories and remove any that 4Guard does not offer.
-2. Add verified contact details to `config.js`. Blank details are intentional until confirmed.
-3. Confirm business hours and service areas before adding them to the page.
-4. Replace the testimonial placeholder only with genuine approved customer feedback.
-5. The photography loads from Unsplash and requires internet access. Confirm image usage rights and replace with authorized assets if needed.
+**Customer account** (`/dashboard`): bookings with reference number, status timeline, confirmed date and the note from 4Guard;
+messages with 4Guard; cancel an upcoming booking; review completed jobs; update details and password.
 
-## Reviews and ratings
+**Owner portal** (same page, signed in as `ADMIN_EMAIL`): counts of waiting/today/confirmed/completed/cancelled jobs,
+search and filters, confirm with date, time of day and a note to the customer, message customers, publish or hide reviews,
+book on behalf of a phone customer, and create a temporary password for a customer who forgot theirs.
 
-A customer can submit one rating per completed booking. Reviews are pending until the owner approves them; only approved reviews appear on the public home page and contribute to the average rating.
+## Project structure
 
-## Enquiry form
-
-The form validates required fields in the browser. When a verified email is configured, it opens an email draft addressed to 4Guard. If only a WhatsApp number is configured, it opens a WhatsApp draft for the customer to review and send. No data is stored on a server. If neither destination is configured, the form explains that delivery is not set up.
-
-## Files
-
-- `index.html`, `services.html`, `about.html`, `contact.html` — individual pages
-- `styles.css` — responsive styles and design system
-- `script.js` — mobile navigation, form and contact behavior
-- `config.js` — verified contact configuration
-- `assets/` — compact vector marks, supplied logo and favicon
-
-
-## Customer portal navigation and in-app feedback update
-
-The customer dashboard now shows job status and the admin's note, offers a clearly visible separate **Book a service** action, and lets customers send private feedback messages tied to their own booking. Admins can read those messages in the **Customer feedback inbox**.
-
-After updating the project, apply the idempotent D1 schema so all portal tables exist, then deploy:
-
-```bash
-npx wrangler d1 execute 4guard-bookings --remote --file=./d1/schema.sql
-npx wrangler deploy
+```text
+public/        Website (HTML, CSS, JS, images, fonts) — served as static files
+src/           Worker API: index.js (routes), lib/ (http, auth), routes/ (auth, bookings, messages, reviews, health)
+migrations/    D1 database migrations, applied in order
+docs/          System design page, diagrams and screenshots
+wrangler.toml  Cloudflare configuration
 ```
 
-The feedback inbox is available only to the configured admin account. Customers can only send messages against bookings belonging to their own account.
+Full annotated tree: [`docs/SYSTEM_DESIGN.md` §9](docs/SYSTEM_DESIGN.md#9-project-structure).
 
+## Before launch: business details
 
-## Booking rules and admin workflow
+Edit **`public/assets/js/config.js`**: phone, WhatsApp, business hours and service areas. Anything left blank is hidden on the site.
 
-- The public **Book a service** action requires a signed-in account. The Worker rejects unauthenticated booking requests even if the browser form is bypassed.
-- Admins can use **Book a service** to make a request under their own signed-in account, or use **Create a booking for a customer** in the admin dashboard. The latter accepts only an existing non-admin customer account email and links the booking to that customer.
-- The API accepts only the configured service/property options, a real date today or later in South Africa, a location up to 200 characters, and details up to 3,000 characters.
-- When changing a booking to **CONFIRMED**, the admin must provide a customer-facing message. Customers see this message with the status in their portal.
-- Quote enquiries on the Contact page are separate from bookings: they prepare an email/WhatsApp draft and are not stored in the booking database.
+Confirm the services in **`public/assets/js/catalog.js`**. The booking form and the API both read this file, so removing a service
+there removes it everywhere.
 
-### Access rules
-The public company pages do not require an account. Sending a quote/enquiry, submitting a service booking, sending customer feedback, and using the customer/admin portal require sign-in. Public navigation shows `Guest`, `Customer · <name>`, or `Admin · <name>` based on the server-verified session. The Worker remains the authority for access control.
+## Run it on your computer
+
+Requirements: Node.js 20 or newer.
+
+```bash
+npm install
+cp .dev.vars.example .dev.vars        # then put a private value in ADMIN_SETUP_KEY
+npm run db:migrate:local              # creates the local database
+npm run dev                           # opens http://localhost:8787
+```
+
+Create the owner account at `/login` → *Create account* with the `ADMIN_EMAIL` address and the `ADMIN_SETUP_KEY` from `.dev.vars`.
+
+## Deploy / upgrade the live site
+
+The database (`4guard-bookings`, id in `wrangler.toml`) already exists from the first version.
+
+```bash
+npx wrangler login
+npm run db:migrate:remote             # adds the new columns and tables; existing accounts and bookings are kept
+npx wrangler secret put ADMIN_EMAIL   # guardddmt@gmail.com (skip if already set)
+npx wrangler secret put ADMIN_SETUP_KEY   # skip if already set
+npm run deploy
+```
+
+Then open `https://<your-site>/api/health` — it should say `"schema":"ready"`.
+
+> **Upgrading from version 1:** existing accounts keep working with the same passwords, existing bookings get a
+> reference number automatically, and old `services.html` links redirect to `/pest-control`.
+> The old `d1/schema.sql` is replaced by `migrations/` — use `npm run db:migrate:remote` from now on.
+
+## Owner guide
+
+| To do this | Go to |
+|---|---|
+| See new requests | Owner portal → **Bookings** → *Waiting for you* |
+| Confirm a job | Open the booking → **Confirm or update** → status *Confirmed*, date, time of day and a note (for example how to prepare) → **Save changes** |
+| Mark a job done | **Update booking** → status *Completed*. The customer can then review it |
+| Reply to a customer | **Messages**, or **Message customer** on the booking |
+| Publish a review | **Reviews** → **Publish on website** |
+| Book for someone who phoned | **Book for a customer** (they need an account first) |
+| Customer forgot their password | **My details** → *Customer forgot their password* → give them the temporary password |
+
+## Security summary
+
+Salted PBKDF2 password hashes · HttpOnly session cookies (only hashes stored) · server-side checks on every owner action ·
+customers only ever see their own data · 8 wrong passwords locks an email for 15 minutes · origin check on every change ·
+Content-Security-Policy and other headers in `public/_headers`. Never commit `.dev.vars` or Cloudflare tokens.
+
+## Credits
+
+Website and booking portal designed and developed by **Neuropulse Inc.**
+Typeface: [Archivo](https://github.com/Omnibus-Type/Archivo) (SIL Open Font License, see `public/assets/fonts/OFL-Archivo.txt`).
+Icons drawn for this project.

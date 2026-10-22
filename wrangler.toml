@@ -1,14 +1,20 @@
+# 4Guard website + booking portal on Cloudflare (Workers + Static Assets + D1).
 name = "4guard-booking-portal"
-main = "worker.js"
-compatibility_date = "2026-10-20"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
 
-# Cloudflare serves every HTML, CSS, JS and asset file in this folder.
+# Every file in /public is served as the website. Requests to /api/* run the Worker first.
 [assets]
 directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
+not_found_handling = "404-page"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "4guard-bookings"
 database_id = "caec0b2f-b98e-4769-a4c3-fef174302eca"
+migrations_dir = "migrations"
+
+[observability]
+enabled = true

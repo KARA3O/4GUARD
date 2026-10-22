@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>4Guard System Design</title>
+  <meta name="description" content="How the 4Guard Cleaning & Pest Solutions website and booking portal was planned and built, by Neuropulse Inc.">
+  <link rel="icon" href="../public/assets/img/favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: 'Archivo'; font-weight: 100 900; font-stretch: 62% 125%; font-display: swap; src: url(../public/assets/fonts/archivo-latin-wdth-normal.woff2) format('woff2'); }
+    :root { --navy: #092e62; --green: #0b7a48; --mint: #e5f4ec; --surface: #f2f5f9; --text: #13213b; --muted: #4f5d75; --line: #d6dee9; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Archivo', system-ui, sans-serif; color: var(--text); background: #fff; line-height: 1.6; font-size: 17px; }
+    h1, h2, h3 { color: var(--navy); font-weight: 800; font-stretch: 118%; line-height: 1.1; margin: 0 0 .5em; letter-spacing: -.01em; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+    h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); }
+    h3 { font-size: 1.2rem; }
+    p { max-width: 70ch; }
+    .wrap { width: min(1180px, 100% - 40px); margin-inline: auto; }
+    header.cover { background: var(--navy); color: #d6e1f2; padding: 64px 0 56px; }
+    header.cover h1 { color: #fff; max-width: 16ch; }
+    header.cover p { font-size: 1.2rem; }
+    .brands { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 36px; margin-bottom: 40px; }
+    .brands img.mark { width: 52px; }
+    .brands .np { background: #0b0c10; padding: 12px 18px; border-radius: 10px; }
+    .brands .np img { height: 40px; display: block; }
+    .wordmark { font-weight: 900; font-stretch: 125%; color: #fff; font-size: 1.8rem; line-height: 1; }
+    .wordmark small { display: block; font-size: .8rem; font-weight: 600; color: #6fd19d; font-stretch: 100%; margin-top: 4px; }
+    nav.toc { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+    nav.toc .wrap { display: flex; gap: 6px 18px; flex-wrap: wrap; padding: 12px 0; font-size: .95rem; }
+    nav.toc a { color: var(--navy); font-weight: 600; text-decoration: none; }
+    nav.toc a:hover { text-decoration: underline; }
+    section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+    section:nth-of-type(even) { background: var(--surface); }
+    .lead { font-size: 1.2rem; color: var(--muted); }
+    figure { margin: 28px 0 0; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px; overflow-x: auto; }
+    figure img { display: block; max-width: 100%; height: auto; margin-inline: auto; }
+    figure.wide img { max-width: none; width: 100%; min-width: 760px; }
+    figcaption { color: var(--muted); font-size: .95rem; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: .97rem; background: #fff; }
+    th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--navy); background: var(--mint); }
+    code { background: var(--surface); padding: 1px 6px; border-radius: 4px; font-size: .92em; }
+    pre { background: #0d2346; color: #dfe8f5; padding: 22px; border-radius: 14px; overflow-x: auto; font-size: .9rem; line-height: 1.5; }
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .phones { display: grid; grid-template-columns: repeat(2, minmax(0, 260px)); gap: 24px; justify-content: start; }
+    .goal { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+    .goal p { margin: 0; color: var(--muted); }
+    .swatches { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; }
+    .swatch { width: 150px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; font-size: .9rem; }
+    .swatch span { display: block; height: 70px; }
+    .swatch b, .swatch small { display: block; padding: 0 12px; }
+    .swatch b { padding-top: 10px; color: var(--navy); }
+    .swatch small { padding-bottom: 10px; color: var(--muted); }
+    footer { background: #0b0c10; color: #9aa6b8; padding: 28px 0; }
+    footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+    footer img { height: 38px; }
+    @media (max-width: 800px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+    @media print { nav.toc { position: static; } section { break-inside: avoid-page; } }
+  </style>
+</head>
+<body>
+  <header class="cover">
+    <div class="wrap">
+      <div class="brands">
+        <div style="display:flex;align-items:center;gap:14px"><img class="mark" src="../public/assets/img/4guard-mark-white.svg" alt=""><span class="wordmark">4GUARD<small>Cleaning &amp; Pest Solutions</small></span></div>
+        <div class="np"><img src="../public/assets/img/neuropulse-logo.png" alt="Neuropulse Inc."></div>
+      </div>
+      <h1>Website and booking portal: system design</h1>
+      <p>How the 4Guard website was planned and built: who it serves, how a booking moves through the system, how data is stored and protected, and how the project is organised.</p>
+      <p>Designed and developed by Neuropulse Inc.</p>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Contents"><div class="wrap">
+    <a href="#goals">Goals</a><a href="#screens">Screens</a><a href="#architecture">Architecture</a><a href="#journeys">Pages and journeys</a>
+    <a href="#data">Data model</a><a href="#lifecycle">Booking lifecycle</a><a href="#sequence">Booking flow</a><a href="#security">Security</a>
+    <a href="#structure">Project structure</a><a href="#design">Design system</a><a href="#stack">Technology</a>
+  </div></nav>
+
+  <main>
+    <section id="goals"><div class="wrap">
+      <h2>What the system had to do</h2>
+      <p class="lead">The earlier version used a general lifestyle look that did not immediately say pest control and cleaning, and booking was spread across separate pages. This version is built around one question customers arrive with: what pest or cleaning problem do I have, and how fast can someone deal with it?</p>
+      <div class="grid3" style="margin-top:28px">
+        <div class="goal"><h3>Obvious at a glance</h3><p>The home page opens with "Pest control and cleaning for homes and businesses" and a picker of pests and cleaning types, each with its own icon.</p></div>
+        <div class="goal"><h3>Booking in four steps</h3><p>Service, property, date and contact, check and send. Links from any pest or clean pre-fill the first step.</p></div>
+        <div class="goal"><h3>Sign-in that never loses work</h3><p>Visitors create an account or log in inside the last step. Answers survive refreshes, and one button signs in and sends.</p></div>
+        <div class="goal"><h3>Customers stay informed</h3><p>Reference number, status timeline, confirmed date, a note on how to prepare, and messages with 4Guard.</p></div>
+        <div class="goal"><h3>One screen for the owner</h3><p>Waiting, today's and confirmed jobs; search; confirm with date and note; reply; publish reviews; book for phone customers.</p></div>
+        <div class="goal"><h3>Secure and low cost</h3><p>Hashed passwords, protected sessions, server-side permissions and security headers, all on Cloudflare's free tier.</p></div>
+      </div>
+    </div></section>
+
+    <section id="screens"><div class="wrap">
+      <h2>Screens</h2>
+      <div class="grid2">
+        <figure><img src="screens/home.jpg" alt="Home page with the service picker" loading="lazy"><figcaption>Home: "What do you need help with?" picker</figcaption></figure>
+        <figure><img src="screens/pest-control.jpg" alt="Pest control page" loading="lazy"><figcaption>Pest control: signs of each pest and booking buttons</figcaption></figure>
+        <figure><img src="screens/booking.jpg" alt="Booking step one" loading="lazy"><figcaption>Booking, step 1, opened from "Termites"</figcaption></figure>
+        <figure><img src="screens/customer-portal.jpg" alt="Customer portal" loading="lazy"><figcaption>Customer account: status timeline and note from 4Guard</figcaption></figure>
+        <figure><img src="screens/owner-portal.jpg" alt="Owner portal" loading="lazy"><figcaption>Owner portal: job counts, filters and search</figcaption></figure>
+        <div class="phones">
+          <figure><img src="screens/mobile-home.jpg" alt="Home page on a phone" loading="lazy"><figcaption>Phone: home</figcaption></figure>
+          <figure><img src="screens/mobile-booking.jpg" alt="Booking on a phone" loading="lazy"><figcaption>Phone: booking</figcaption></figure>
+        </div>
+      </div>
+    </div></section>
+
+    <section id="architecture"><div class="wrap">
+      <h2>Architecture</h2>
+      <p>The whole system is one Cloudflare Workers project. Static pages are served straight from Cloudflare's edge; only requests to <code>/api/*</code> run code. Data lives in Cloudflare D1, a SQLite database. One shared file, <code>catalog.js</code>, lists every service so the booking form and the server always agree.</p>
+      <figure class="wide"><img src="diagrams/1-architecture.svg" alt="Architecture diagram: users, Cloudflare edge, static website, Worker API routes and D1 database"></figure>
+    </div></section>
+
+    <section id="journeys"><div class="wrap">
+      <h2>Pages and journeys</h2>
+      <p>Every service page leads to booking, and booking leads to the account page where the job is tracked. The same account page shows a customer view or the owner view depending on who signs in.</p>
+      <figure class="wide"><img src="diagrams/2-sitemap.svg" alt="Sitemap and user journey diagram"></figure>
+      <table>
+        <tr><th>Page</th><th>Address</th><th>Purpose</th></tr>
+        <tr><td>Home</td><td><code>/</code></td><td>Headline, service picker, pests and cleaning, how booking works, reviews</td></tr>
+        <tr><td>Pest control</td><td><code>/pest-control</code></td><td>Each pest with signs to look for, booking buttons, preparation FAQ</td></tr>
+        <tr><td>Cleaning</td><td><code>/cleaning</code></td><td>Each type of clean with what it usually includes</td></tr>
+        <tr><td>About, Contact</td><td><code>/about</code>, <code>/contact</code></td><td>Company story; contact details and question form</td></tr>
+        <tr><td>Book a service</td><td><code>/booking</code></td><td>Four-step booking with sign-in inside the form</td></tr>
+        <tr><td>Log in</td><td><code>/login</code></td><td>Log in or create an account</td></tr>
+        <tr><td>Account</td><td><code>/dashboard</code></td><td>Customer or owner view</td></tr>
+      </table>
+    </div></section>
+
+    <section id="data"><div class="wrap">
+      <h2>Data model</h2>
+      <p>Six tables. Bookings belong to a customer account, can have many messages and at most one review. Passwords and session tokens are only ever stored as hashes.</p>
+      <figure class="wide"><img src="diagrams/3-database.svg" alt="Entity relationship diagram of the database"></figure>
+    </div></section>
+
+    <section id="lifecycle"><div class="wrap">
+      <h2>Booking lifecycle</h2>
+      <div class="grid2" style="align-items:start">
+        <div>
+          <p>Every booking moves through clear states. Confirming requires a date, a time of day and a note to the customer, so nobody is left guessing how to prepare.</p>
+          <table>
+            <tr><th>Status</th><th>Meaning</th></tr>
+            <tr><td>Waiting for confirmation</td><td>Request received; 4Guard has not confirmed yet</td></tr>
+            <tr><td>Confirmed</td><td>Date, time of day and preparation note set</td></tr>
+            <tr><td>Completed</td><td>Job done; the customer can leave a review</td></tr>
+            <tr><td>Cancelled</td><td>By the customer (with optional reason) or by 4Guard</td></tr>
+          </table>
+        </div>
+        <figure style="margin-top:0"><img src="diagrams/4-booking-lifecycle.svg" alt="Booking state diagram"></figure>
+      </div>
+    </div></section>
+
+    <section id="sequence"><div class="wrap">
+      <h2>How a booking flows through the system</h2>
+      <p>From tapping a pest on the home page to the owner confirming and replying.</p>
+      <figure class="wide"><img src="diagrams/5-booking-sequence.svg" alt="Sequence diagram of a booking"></figure>
+    </div></section>
+
+    <section id="security"><div class="wrap">
+      <h2>Security</h2>
+      <figure class="wide"><img src="diagrams/6-auth-security.svg" alt="Authentication and access control flow"></figure>
+      <table>
+        <tr><th>Risk</th><th>Protection</th></tr>
+        <tr><td>Leaked password database</td><td>PBKDF2-SHA256, 100,000 rounds, unique salt per account</td></tr>
+        <tr><td>Stolen sessions</td><td>Random token in an HttpOnly, Secure, SameSite cookie; only its hash is stored</td></tr>
+        <tr><td>Password guessing</td><td>8 wrong attempts locks that email for 15 minutes</td></tr>
+        <tr><td>Claiming the owner account</td><td>The owner email needs a private setup key to register</td></tr>
+        <tr><td>Seeing other customers' data</td><td>Every query is filtered on the server by the signed-in account</td></tr>
+        <tr><td>Forged requests from other sites</td><td>SameSite cookie and an Origin check on every change</td></tr>
+        <tr><td>Script injection and framing</td><td>Strict Content-Security-Policy, X-Frame-Options, escaped output</td></tr>
+      </table>
+    </div></section>
+
+    <section id="structure"><div class="wrap">
+      <h2>Project structure</h2>
+<pre>4GUARD/
+├── README.md               Setup, deployment and owner guide
+├── wrangler.toml           Cloudflare: Worker, static assets, D1 database, migrations
+├── package.json            npm run dev | db:migrate:local | db:migrate:remote | deploy
+├── .dev.vars.example       Local secrets template
+├── migrations/             Database changes, applied in order
+│   ├── 0001_initial.sql
+│   └── 0002_bookings_v2.sql
+├── src/                    Worker API (server)
+│   ├── index.js            Route table, origin check, errors
+│   ├── lib/http.js         Responses, parsing, validation helpers
+│   ├── lib/auth.js         Passwords, sessions, roles, throttling
+│   └── routes/             auth.js, bookings.js, messages.js, reviews.js, health.js
+├── public/                 Website
+│   ├── index.html  pest-control.html  cleaning.html  about.html  contact.html
+│   ├── booking.html  login.html  dashboard.html  404.html
+│   ├── _headers  _redirects
+│   └── assets/
+│       ├── css/styles.css
+│       ├── fonts/          Archivo (self-hosted)
+│       ├── img/            4Guard logo and marks, icons.svg, Neuropulse logo
+│       └── js/             config.js, catalog.js, api.js, site.js, home.js,
+│                           booking.js, login.js, dashboard.js, contact.js
+└── docs/                   This page, SYSTEM_DESIGN.md, diagrams/, screens/</pre>
+    </div></section>
+
+    <section id="design"><div class="wrap">
+      <h2>Design system</h2>
+      <p>Colours come from the 4Guard logo. A single typeface, Archivo, is used at two widths: wide and heavy for headings, like the lettering on a service vehicle, and normal width for reading. Custom icons for each pest and type of clean replace stock photography, so the site is instantly recognisable as pest control and cleaning.</p>
+      <div class="swatches">
+        <div class="swatch"><span style="background:#092e62"></span><b>Navy</b><small>#092E62</small></div>
+        <div class="swatch"><span style="background:#10965a"></span><b>Brand green</b><small>#10965A</small></div>
+        <div class="swatch"><span style="background:#0b7a48"></span><b>Button green</b><small>#0B7A48</small></div>
+        <div class="swatch"><span style="background:#e5f4ec"></span><b>Mint</b><small>#E5F4EC</small></div>
+        <div class="swatch"><span style="background:#f2f5f9"></span><b>Surface</b><small>#F2F5F9</small></div>
+      </div>
+      <figure style="max-width:760px"><img src="../public/assets/img/4guard-logo.jpg" alt="4Guard logo" style="max-width:260px"><figcaption>The 4Guard logo: the brand colours and the technician motif.</figcaption></figure>
+    </div></section>
+
+    <section id="stack"><div class="wrap">
+      <h2>Technology</h2>
+      <table>
+        <tr><th>Part</th><th>Choice</th><th>Why</th></tr>
+        <tr><td>Hosting</td><td>Cloudflare Workers + Static Assets</td><td>Fast everywhere, HTTPS included, free tier covers a small business</td></tr>
+        <tr><td>Database</td><td>Cloudflare D1 (SQLite)</td><td>Managed, backed up by Cloudflare, versioned migrations</td></tr>
+        <tr><td>Server code</td><td>Plain JavaScript modules</td><td>No framework to update; easy for any developer to maintain</td></tr>
+        <tr><td>Website</td><td>HTML, CSS, JavaScript modules</td><td>No build step; pages load quickly and work on any device</td></tr>
+        <tr><td>Diagrams</td><td>Mermaid (<code>docs/diagrams/*.mmd</code>)</td><td>Text files that can be edited and re-drawn</td></tr>
+      </table>
+    </div></section>
+  </main>
+
+  <footer><div class="wrap"><span>4Guard Cleaning &amp; Pest Solutions. Website and booking portal designed and developed by Neuropulse Inc.</span><img src="../public/assets/img/neuropulse-logo.png" alt="Neuropulse Inc."></div></footer>
+</body>
+</html>

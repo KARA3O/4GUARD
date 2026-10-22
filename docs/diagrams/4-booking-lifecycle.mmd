@@ -1,0 +1,12 @@
+stateDiagram-v2
+  [*] --> PENDING: Customer sends booking<br/>(or owner books for a customer)
+  PENDING --> CONFIRMED: Owner confirms<br/>date, time and a note are required
+  PENDING --> CANCELLED: Customer cancels<br/>or owner declines
+  CONFIRMED --> COMPLETED: Owner marks the job done
+  CONFIRMED --> CANCELLED: Customer cancels<br/>or owner cancels
+  COMPLETED --> Reviewed: Customer leaves 1-5 stars
+  Reviewed --> Published: Owner approves
+  Reviewed --> Hidden: Owner hides
+  CANCELLED --> [*]
+  Published --> [*]
+  Hidden --> [*]

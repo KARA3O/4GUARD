@@ -1,0 +1,22 @@
+flowchart TB
+  HOME["Home /<br/>What do you need help with? picker"]
+  PEST["Pest control /pest-control<br/>signs of each pest, FAQ"]
+  CLEAN["Cleaning /cleaning<br/>what each clean includes"]
+  ABOUT["About /about"]
+  CONTACT["Contact /contact<br/>question form (email draft)"]
+  BOOK["Book a service /booking<br/>4 steps: service, property,<br/>date and contact, check and send"]
+  LOGIN["Log in /login<br/>log in or create account"]
+  DASH{"Account /dashboard"}
+  CUST["Customer view<br/>My bookings: status timeline, notes,<br/>cancel, review<br/>Messages, My details"]
+  OWN["Owner view<br/>Bookings: counts, filters, confirm with date and note<br/>Messages: reply to customers<br/>Reviews: publish or hide<br/>Book for a customer, temporary passwords"]
+
+  HOME --> PEST & CLEAN & ABOUT & CONTACT
+  HOME -- "tap a pest or clean" --> BOOK
+  PEST -- "Book a treatment" --> BOOK
+  CLEAN -- "Book this clean" --> BOOK
+  CONTACT --> BOOK
+  BOOK -- "not signed in: create account or<br/>log in inside step 4, nothing lost" --> BOOK
+  BOOK -- "sent: reference 4G-XXXXXX" --> DASH
+  HOME -- "Log in" --> LOGIN --> DASH
+  DASH -- "customer account" --> CUST
+  DASH -- "ADMIN_EMAIL account" --> OWN
